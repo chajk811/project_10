@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>DETAIL</h1>
+  <hr>
+  <img src="{{ movie.poster_url}}" alt="#" width="300px">
+  <p> 장르 :
+    {% for genre in movie.genres.all %}
+      {{ genre }}
+    {% endfor %}
+  </p>
+  <p>관객 수 : {{ movie.audience }}</p>
+  <p>줄거리 : {{ movie.description }}</p>
+  <hr>
+  <p class="card-text">
+    <a href="{% url 'movies:like' movie.pk %}">
+      {% if  user in movie.like_users.all %}
+        <i class="fas fa-heart" style="color: crimson;"></i>
+      {% else %}
+        <i class="fas fa-heart" style="color: black;"></i>
+      {% endif %}
+    </a>
+    {{ movie.like_users.all|length }}명이 이 글을 좋아합니다.
+  </p>
+  <hr>
+  {% for review in reviews %}
+    <div>
+      
+    </div>
+  
+  {% endfor %}
+  {% if user.is_authenticated %}
+  <hr>
+    <form action="{% url 'movies:review_create' movie.pk %}" method="POST">
+      {% csrf_token %}
+      {{ review_from }}
+      <input type="submit" value="submit">
+    </form>
+  {% else %}
+    <a href="#">[댓글을 작성하려면 로그인하세요.]</a>
+  {% endif %}
+  <hr>
+{% endblock %}
+
+
+
